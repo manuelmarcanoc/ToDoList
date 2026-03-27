@@ -39,7 +39,7 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: AuthService().user,
       builder: (context, snapshot) {
-        // Si el usuario está logueado, mostramos la pantalla principal
+
         if (snapshot.hasData) {
           return HomeScreen(uid: snapshot.data!.uid);
         }

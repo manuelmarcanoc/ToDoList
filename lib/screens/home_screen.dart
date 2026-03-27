@@ -62,10 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: _firestore.tasques,
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                if (snapshot.hasError) {
+                  return Center(child: Padding(padding: const EdgeInsets.all(16), child: Text('Error: ${snapshot.error}', textAlign: TextAlign.center)));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text('Aún no tienes tareas. ¡Añade una!'));
+                }
                 var docs = snapshot.data!.docs;
                 return ListView.builder(
                   itemCount: docs.length,
